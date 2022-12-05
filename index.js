@@ -30,6 +30,7 @@ const db = mysql.createConnection(
 You're connected to the employees database!`)
 );
 
+
 // // Create a movie
 // app.post('/api/new-movie', ({ body }, res) => {
 //     const sql = `INSERT INTO movies (movie_name)

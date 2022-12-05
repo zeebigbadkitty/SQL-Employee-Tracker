@@ -14,10 +14,10 @@ VALUES ("Executive",125000),
        ("Sales",65000),
        ("Customer Service Representative",50000);
 INSERT INTO employee (first_name, last_name, Manager)
-VALUES (),
-       (),
-       (),
-       (),
-       (),
-       (),
-       ();
+VALUES ("Elaine", "Wright", "Nathaniel Morrow"),
+       ("Emma", "Cain","Nathaniel Morrow"),
+       ("Sonny", "Krueger", "Nathaniel Morrow"),
+       ("Ayah", "Ortega", "Jakob Donaldson" ),
+       ("Oscar", "Matthews", "Jakob Donaldson"),
+       ("Estelle", "Erickson", "Jakob Donaldson"),
+       ("Miles", "Higgins", "Laila Maddox" );
