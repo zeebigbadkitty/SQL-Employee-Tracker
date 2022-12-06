@@ -45,49 +45,111 @@ const startMenu = () => {
       console.log(data.choices);
       switch (data.choices) {
         case "View all departments.":
-          db.query("SELECT * FROM departments", function (err, results) {//View all: Departments, roles, employees, add a department, add a role, add an employee and update their role.
+          db.query("SELECT * FROM departments", function (err, results) {
+            //View all: Departments, roles, employees, add a department, add a role, add an employee and update their role.
             console.log(results);
+            startMenu();
           });
           break;
         case "View all roles.":
           db.query("SELECT * FROM roles", function (err, results) {
             console.log(results);
+            startMenu();
           });
           break;
         case "View all employees.":
           db.query("SELECT * FROM employees", function (err, results) {
             console.log(results);
+            startMenu();
           });
-          break; //add = insert
+          break;
         case "Add a department.":
-          db.query("", function (err, results) {//When adding a department: Enter the name of the department.
-            console.log(results);
-          });
+          inquirer
+            .prompt([
+              {
+                type: "input",
+                name: "newdepartment",
+                message:
+                  "Please enter the name of the department you would like to add.",
+              },
+            ])
+            .then((results) => {
+              db.query("INSERT INTO departments SET ?", {
+                name: results.newdepartment,
+              });
+              startMenu();
+            });
+
           break;
         case "Add a role.":
-          db.query("", function (err, results) {//When you add a role: Name, Salary, Department.
-            console.log(results);
+          db.query("SELECT * FROM departments", (err, result) => {
+            inquirer
+              .prompt([
+                {
+                  type: "input",
+                  name: "newrole",
+                  message: "Please enter the name of the role.",
+                },
+                {
+                  type: "input",
+                  name: "newsalary",
+                  message: "Please enter the salary of that role.",
+                },
+                {
+                  type: "list",
+                  name: "newdepartment",
+                  message: "Please select the department ID for this role.",
+                  choices: result.map((department) => department.name),
+                },
+              ])
+              .then((results) => {
+                const department = result.find(department => department.name === results.newdepartment) //matching the department name to the id to pass into the db.query.
+                db.query(
+                  "INSERT INTO roles SET ?",
+                  {
+                    title: results.newrole,
+                    salary: results.newsalary,
+                    department_id: department.id,
+                  },
+                  function (err) {
+                    if (err) throw err;
+                    console.log("Role successfully added.");
+                    startMenu();
+                  }
+                );
+              });
           });
+
           break;
         case "Add an employee":
-          db.query("", function (err, results) {//When adding an employee: First, Last, Role, Manager.
+          db.query("INSERT INTO employees", function (err, results) {
+            //When adding an employee: First, Last, Role, Manager.
             console.log(results);
           });
           break;
         case "Update an employee role.":
-          db.query("", function (err, results) {//When updating the role: prompted to select employee and update their new role.
-            console.log(results);
-          });
+          db.query("SELECT * FROM employees", (err, result)  =>
+          {
+          inquirer.prompt([
+            {
+              type: "list",
+              name: "newdepartment",
+              message: "Please select the employee you would like to update",
+              choices: result.map((employee) => employee.first_name+" "+employee.last_name),
+            },
+          ])
+          })
+
+            //When updating the role: prompted to select employee and update their new role.
+
           break;
         default:
           console.log("Please make a selection to continue.");
-
       }
     });
 };
 
 startMenu();
-
 
 // app.use((req, res) => {
 //   res.status(404).end();
