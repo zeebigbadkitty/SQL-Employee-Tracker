@@ -88,11 +88,11 @@ const startMenu = () => {
 
 startMenu();
 
-404 request and app.listen.
-app.use((req, res) => {
-    res.status(404).end();
-  });
 
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
+// app.use((req, res) => {
+//   res.status(404).end();
+// });
+
+// app.listen(PORT, () => {
+//   console.log(`Server running on port ${PORT}`);
+// });
