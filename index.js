@@ -5,16 +5,11 @@
 //When updating the role: prompted to select employee and update their new role. 
 
 
-const express = require('express');
+
 const mysql = require('mysql2');
-const inquirer = require('inquirer')
+const inquirer = require('inquirer');
 
 const PORT = process.env.PORT || 3001;
-const app = express();
-
-//Middleware
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
 
 //Database connection.
 const db = mysql.createConnection(
@@ -30,61 +25,28 @@ const db = mysql.createConnection(
 You're connected to the employees database!`)
 );
 
+//Arrays to store new employees, roles, etc.
+const employeeArr = [];
+const rolesArr = [];
 
-// // Create a movie
-// app.post('/api/new-movie', ({ body }, res) => {
-//     const sql = `INSERT INTO movies (movie_name)
-//       VALUES (?)`;
-//     const params = [body.movie_name];
+//Inquirer Questions
+inquirer
+  .prompt([
+    {
+      type: 'list',
+      name: 'choices',
+      message: 'What do you want to do?',
+      choices: ['HTML', 'CSS', 'JavaScript', 'MySQL'] //view all departments, view all roles, view all employees, add a department, add a role, add an employee, and update an employee role
+    }, 
     
-//     db.query(sql, params, (err, result) => {
-//       if (err) {
-//         res.status(400).json({ error: err.message });
-//         return;
-//       }
-//       res.json({
-//         message: 'success',
-//         data: body
-//       });
-//     });
-//   });
-// Read all movies
-// app.get('/api/movies', (req, res) => {
-//     const sql = `SELECT id, movie_name AS title FROM movies`;
-    
-//     db.query(sql, (err, rows) => {
-//       if (err) {
-//         res.status(500).json({ error: err.message });
-//          return;
-//       }
-//       res.json({
-//         message: 'success',
-//         data: rows
-//       });
-//     });
-//   });
-  
-//   // Delete a movie
-//   app.delete('/api/movie/:id', (req, res) => {
-//     const sql = `DELETE FROM movies WHERE id = ?`;
-//     const params = [req.params.id];
-    
-//     db.query(sql, params, (err, result) => {
-//       if (err) {
-//         res.statusMessage(400).json({ error: res.message });
-//       } else if (!result.affectedRows) {
-//         res.json({
-//         message: 'Movie not found'
-//         });
-//       } else {
-//         res.json({
-//           message: 'deleted',
-//           changes: result.affectedRows,
-//           id: req.params.id
-//         });
-//       }
-//     });
-//   });
+])
+.then((data) => {
+  const filename = `${data.name.toLowerCase().split(' ').join('')}.json`;
+
+  fs.writeFile(filename, JSON.stringify(data, null, '\t'), (err) =>  //run a function that runs a db.query. select *employees. 
+    err ? console.log(err) : console.log('Success!')
+  );
+});
 
 
 
