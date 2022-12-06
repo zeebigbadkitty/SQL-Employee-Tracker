@@ -162,13 +162,14 @@ const startMenu = () => {
                       },
                     ])
                     .then((results) => {
-                      const role = result.find(
+                      const roleId = result.find(
                         (role) => role.title === results.newrole
                       );
                       db.query(
                         "UPDATE employees SET role_id = ? WHERE id = ?",
-                        [role.id, employeeID.id]
+                        [roleId.id, employeeID.id]
                       );
+                      startMenu();
                     });
                 });
               });
