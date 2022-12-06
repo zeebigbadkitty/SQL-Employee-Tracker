@@ -103,7 +103,9 @@ const startMenu = () => {
                 },
               ])
               .then((results) => {
-                const department = result.find(department => department.name === results.newdepartment) //matching the department name to the id to pass into the db.query.
+                const department = result.find(
+                  (department) => department.name === results.newdepartment
+                ); //matching the department name to the id to pass into the db.query.
                 db.query(
                   "INSERT INTO roles SET ?",
                   {
@@ -128,19 +130,51 @@ const startMenu = () => {
           });
           break;
         case "Update an employee role.":
-          db.query("SELECT * FROM employees", (err, result)  =>
-          {
-          inquirer.prompt([
-            {
-              type: "list",
-              name: "newdepartment",
-              message: "Please select the employee you would like to update",
-              choices: result.map((employee) => employee.first_name+" "+employee.last_name),
-            },
-          ])
-          })
+          db.query("SELECT * FROM employees", (err, result) => {
+            inquirer
+              .prompt([
+                {
+                  type: "list",
+                  name: "newemployeename",
+                  message:
+                    "Please select the employee you would like to update",
+                  choices: result.map(
+                    (employee) => employee.first_name + " " + employee.last_name
+                  ),
+                },
+              ])
+              .then((results) => {
+                //Matching employee name to their ID.
+                const employeeID = result.find(
+                  (employee) =>
+                    employee.first_name + " " + employee.last_name ===
+                    results.newemployeename
+                );
+                db.query("SELECT * from roles", (err, result) => {
+                  inquirer
+                    .prompt([
+                      {
+                        type: "list",
+                        name: "newrole",
+                        message:
+                          "Please select the updated role for the employee.",
+                        choices: result.map((role) => role.title),
+                      },
+                    ])
+                    .then((results) => {
+                      const role = result.find(
+                        (role) => role.title === results.newrole
+                      );
+                      db.query(
+                        "UPDATE employees SET role_id = ? WHERE id = ?",
+                        [role.id, employeeID.id]
+                      );
+                    });
+                });
+              });
+          });
 
-            //When updating the role: prompted to select employee and update their new role.
+          //When updating the role: prompted to select employee and update their new role.
 
           break;
         default:
