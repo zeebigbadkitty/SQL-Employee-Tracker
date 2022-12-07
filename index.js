@@ -145,7 +145,9 @@ const startMenu = () => {
                   type: "list",
                   name: "newrole2",
                   message: "Please select their role.",
-                  choices: console.log(result),
+                  choices: result.map(
+                    (result) => result.role_id + " " + result.title
+                  ),
                 },
                 {
                   type: "list",
