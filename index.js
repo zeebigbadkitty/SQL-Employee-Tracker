@@ -17,10 +17,10 @@ const db = mysql.createConnection(
 You're connected to the employees database!`)
 );
 
-//Arrays to store new employees, roles, etc.
-const employeeArr = [];
-const rolesArr = [];
-const departmentArr = [];
+// //Arrays to store new employees, roles, etc.
+// const employeeArr = [];
+// const rolesArr = [];
+// const departmentArr = [];
 
 //Inquirer Questions
 const startMenu = () => {
@@ -75,9 +75,10 @@ const startMenu = () => {
             ])
             .then((results) => {
               db.query("INSERT INTO departments SET ?", {
+                //insert into
                 name: results.newdepartment,
               });
-              startMenu();
+              startMenu(); //restarting menu
             });
 
           break;
@@ -124,10 +125,45 @@ const startMenu = () => {
 
           break;
         case "Add an employee":
-          db.query("INSERT INTO employees", function (err, results) {
-            //When adding an employee: First, Last, Role, Manager.
-            console.log(results);
-          });
+        db.query("SELECT * FROM employees", (err, result) => {
+          inquirer
+            .prompt([             //When adding an employee: First, Last, Role, Manager.
+              {
+                type: "input",
+                name: "newfirst_name",
+                message: "Please enter the first name of the employee.",
+              },
+              {
+                type: "input",
+                name: "newlast_name",
+                message: "Please enter the last name of the employee.",
+              },
+              {
+                type: "input",
+                name: "newrole2",
+                message: "Please enter the first name of their role.",
+              },
+              {
+                type: "input",
+                name: "newmanager",
+                message: "Please select their manager.",
+              },
+            ])
+            .then((results) => {
+              db.query(
+                "INSERT INTO employees SET ?",
+                {
+//adding function.
+                },
+                function (err) {
+                  if (err) throw err;
+                  console.log("Employee successfully added.");
+                  startMenu();
+                }
+              );
+            });
+        });
+
           break;
         case "Update an employee role.":
           db.query("SELECT * FROM employees", (err, result) => {
@@ -158,18 +194,19 @@ const startMenu = () => {
                         name: "newrole",
                         message:
                           "Please select the updated role for the employee.",
-                        choices: result.map((role) => role.title),
+                        choices: result.map((role) => ({name:role.title, value:role.id})),
                       },
                     ])
                     .then((results) => {
-                      const roleId = result.find(
-                        (role) => role.title === results.newrole
-                      );
-                      db.query(
-                        "UPDATE employees SET role_id = ? WHERE id = ?",
-                        [roleId.id, employeeID.id]
-                      );
-                      startMenu();
+                      console.log(results)
+                      // const roleId = result.find(
+                      //   (role) => role.title === results.newrole
+                      // );
+                      // db.query(
+                      //   "UPDATE employees SET role_id = ? WHERE id = ?",
+                      //   [roleId.id, employeeID.id]
+                      // );
+                      // startMenu();
                     });
                 });
               });
