@@ -144,9 +144,10 @@ const startMenu = () => {
                 message: "Please select their role.",
               },
               {
-                type: "input",
+                type: "list",
                 name: "newmanager",
                 message: "Please select their manager. (If none, leave blank.)",
+                choices: console.log(result)
               },
             ])
             .then((results) => {
