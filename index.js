@@ -16,11 +16,12 @@ const db = mysql.createConnection(
 
 You're connected to the employees database!`)
 );
-
-// //Arrays to store new employees, roles, etc.
-// const employeeArr = [];
-// const rolesArr = [];
-// const departmentArr = [];
+//To view role choices
+var roleChoices = async () => {
+  const roleQuery = `SELECT title AS value, role_id FROM roles;`;
+  const roles = await connection.query(roleQuery);
+  return roles[0];
+};
 
 //Inquirer Questions
 const startMenu = () => {
@@ -125,41 +126,54 @@ const startMenu = () => {
 
           break;
         case "Add an employee":
-        db.query("SELECT * FROM employees", (err, result) => {
-          inquirer
-            .prompt([             //When adding an employee: First, Last, Role, Manager.
-              {
-                type: "input",
-                name: "newfirst_name",
-                message: "Please enter the first name of the employee.",
-              },
-              {
-                type: "input",
-                name: "newlast_name",
-                message: "Please enter the last name of the employee.",
-              },
-              {
-                type: "input",
-                name: "newrole2",
-                message: "Please select their role.",
-              },
-              {
-                type: "list",
-                name: "newmanager",
-                message: "Please select their manager. (If none, leave blank.)",
-                choices: console.log(result)
-              },
-            ])
-            .then((results) => {
-              db.query ("INSERT INTO employee (first_name, last_name, role_id, manager) VALUES (?, ?, ?, ?)",
-              [results.newfirst_name, results.newlast_name, results.newrole2, results.newmanager],
-                function (err) {
-                  if (err) throw err;
-                  console.log("Employee successfully added.");
-                });
-                startMenu();
-            });
-        });
+          db.query("SELECT * FROM employees, roles", (err, result) => {
+
+            inquirer
+              .prompt([
+                //When adding an employee: First, Last, Role, Manager.
+                {
+                  type: "input",
+                  name: "newfirst_name",
+                  message: "Please enter the first name of the employee.",
+                },
+                {
+                  type: "input",
+                  name: "newlast_name",
+                  message: "Please enter the last name of the employee.",
+                },
+                {
+                  type: "list",
+                  name: "newrole2",
+                  message: "Please select their role.",
+                  choices: console.log(result),
+                },
+                {
+                  type: "list",
+                  name: "newmanager",
+                  message:
+                    "Please select their manager.",
+                  choices: result.map(
+                    (employee) => employee.first_name + " " + employee.last_name
+                  ),
+                },
+              ])
+              .then((results) => {
+                db.query(
+                  "INSERT INTO employees (first_name, last_name, role_id, manager) VALUES (?, ?, ?, ?)",
+                  [
+                    results.newfirst_name,
+                    results.newlast_name,
+                    results.newrole2,
+                    results.newmanager,
+                  ],
+                  function (err) {
+                    if (err) throw err;
+                    console.log("Employee successfully added.");
+                    startMenu();
+                  }
+                );
+              });
+          });
 
           break;
         case "Update an employee role.":
@@ -191,11 +205,14 @@ const startMenu = () => {
                         name: "newrole",
                         message:
                           "Please select the updated role for the employee.",
-                        choices: result.map((role) => ({name:role.title, value:role.id})),
+                        choices: result.map((role) => ({
+                          name: role.title,
+                          value: role.id,
+                        })),
                       },
                     ])
                     .then((results) => {
-                      console.log(results)
+                      console.log(results);
                       // const roleId = result.find(
                       //   (role) => role.title === results.newrole
                       // );
