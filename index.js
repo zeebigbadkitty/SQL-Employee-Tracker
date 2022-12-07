@@ -141,7 +141,7 @@ const startMenu = () => {
               {
                 type: "input",
                 name: "newrole2",
-                message: "Please enter the first name of their role.",
+                message: "Please select their role.",
               },
               {
                 type: "input",
@@ -150,14 +150,13 @@ const startMenu = () => {
               },
             ])
             .then((results) => {
-              db. "INSERT INTO employee (first_name, last_name, role_id, manager) VALUES (?, ?, ?, ?)",
-              [res.newfirst_name, res.newlast_name, res.newrole2, res.newmanager],
+              db.query ("INSERT INTO employee (first_name, last_name, role_id, manager) VALUES (?, ?, ?, ?)",
+              [results.newfirst_name, results.newlast_name, results.newrole2, results.newmanager],
                 function (err) {
                   if (err) throw err;
                   console.log("Employee successfully added.");
-                }};
+                });
                 startMenu();
-              );
             });
         });
 
