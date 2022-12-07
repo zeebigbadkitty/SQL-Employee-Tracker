@@ -146,20 +146,17 @@ const startMenu = () => {
               {
                 type: "input",
                 name: "newmanager",
-                message: "Please select their manager.",
+                message: "Please select their manager. (If none, leave blank.)",
               },
             ])
             .then((results) => {
-              db.query(
-                "INSERT INTO employees SET ?",
-                {
-//adding function.
-                },
+              db. "INSERT INTO employee (first_name, last_name, role_id, manager) VALUES (?, ?, ?, ?)",
+              [res.newfirst_name, res.newlast_name, res.newrole2, res.newmanager],
                 function (err) {
                   if (err) throw err;
                   console.log("Employee successfully added.");
-                  startMenu();
-                }
+                }};
+                startMenu();
               );
             });
         });
