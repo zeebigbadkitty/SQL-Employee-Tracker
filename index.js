@@ -126,7 +126,7 @@ const startMenu = () => {
 
           break;
         case "Add an employee":
-          db.query("SELECT * FROM employees, roles", (err, result) => {
+          db.query("SELECT employees.id FROM employees LEFT JOIN roles ON employees.id = roles.title", (err, result) => {
 
             inquirer
               .prompt([
@@ -145,9 +145,7 @@ const startMenu = () => {
                   type: "list",
                   name: "newrole2",
                   message: "Please select their role.",
-                  choices: result.map(
-                    (result) => result.role_id + " " + result.title
-                  ),
+                  choices: console.log(result)
                 },
                 {
                   type: "list",
