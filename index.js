@@ -218,21 +218,18 @@ const startMenu = () => {
                       },
                     ])
                     .then((results) => {
-                      console.log(results);
-                      // const roleId = result.find(
-                      //   (role) => role.title === results.newrole
-                      // );
-                      // db.query(
-                      //   "UPDATE employees SET role_id = ? WHERE id = ?",
-                      //   [roleId.id, employeeID.id]
-                      // );
-                      // startMenu();
+                      const roleId = result.find(
+                        (role) => role.title === results.newrole
+                      );
+                      db.query(
+                        "UPDATE employees SET role_id = ? WHERE id = ?",
+                        [results.role_id, employeeID.id]
+                      );
+                      startMenu();
                     });
                 });
               });
           });
-
-          //When updating the role: prompted to select employee and update their new role.
 
           break;
         default:
