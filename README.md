@@ -26,7 +26,7 @@ You will have to run using "node index.js" and then follow the prompts to make a
 
 ## Example
 
-[Click here for an example.](https://drive.google.com/file/d/1JqVVndYKeBeJ5lYLR-EYBKA8XufJN3WY/view)
+[Click here for an example.](https://drive.google.com/file/d/1JqVVndYKeBeJ5lYLR-EYBKA8XufJN3WY/view)<br>
 ![Example GIF](./demo.gif)
 
 ## Credits
